@@ -51,7 +51,66 @@ if (DatePicker) {
 				DatePicker.create(dateBox,startDate,callback);
 			}
 		},
+		
+		dueChooser: {
+			handler: function(place,macroName,params,wikifier,paramString,tiddler) {
 
+				var useTiddler = tiddler;
+				if (params[0])
+					useTiddler = store.fetchTiddler(params[0]);
+
+				var curVal = useTiddler.fields['mgtd_due'] || undefined;
+				var startDate = curVal ? Date.convertFromYYYYMMDDHHMM(curVal) : null;
+
+				var dateBox = createTiddlyElement(place,'input',null,'dateBox');
+
+				var dateFormat = config.mGTD.getOptTxt('ticklerdateformat');
+				var defaultDateFormat = 'ddd, DD-mmm-YY';
+				if (!dateFormat) {
+					// makes it nicer for upgraders who don't have a format set
+					dateFormat = defaultDateFormat;
+					config.mGTD.setOptTxt('ticklerdateformat', defaultDateFormat);
+				}
+				dateBox.value = startDate ? startDate.formatString(dateFormat) : '(set date)';
+
+				var callback = function(el,objDate){
+					el.value = objDate.formatString(dateFormat);
+					store.setValue(useTiddler, 'mgtd_due',objDate.convertToYYYYMMDDHHMM());
+				}
+				DatePicker.create(dateBox,startDate,callback);
+			}
+		},
+		
+		doneChooser: {
+			handler: function(place,macroName,params,wikifier,paramString,tiddler) {
+
+				var useTiddler = tiddler;
+				if (params[0])
+					useTiddler = store.fetchTiddler(params[0]);
+
+				var curVal = useTiddler.fields['mgtd_done'] || undefined;
+				var startDate = curVal ? Date.convertFromYYYYMMDDHHMM(curVal) : null;
+
+				var dateBox = createTiddlyElement(place,'input',null,'dateBox');
+
+				var dateFormat = config.mGTD.getOptTxt('ticklerdateformat');
+				var defaultDateFormat = 'ddd, DD-mmm-YY';
+				if (!dateFormat) {
+					// makes it nicer for upgraders who don't have a format set
+					dateFormat = defaultDateFormat;
+					config.mGTD.setOptTxt('ticklerdateformat', defaultDateFormat);
+				}
+				dateBox.value = startDate ? startDate.formatString(dateFormat) : '(set date)';
+
+				var callback = function(el,objDate){
+					el.value = objDate.formatString(dateFormat);
+					store.setValue(useTiddler, 'mgtd_done',objDate.convertToYYYYMMDDHHMM());
+					store.setValue(useTiddler, 'modified',objDate.convertToYYYYMMDDHHMM());
+				}
+				DatePicker.create(dateBox,startDate,callback);
+			}
+		},
+		
 		addDay: {
             label:   {addDay:"+d",  addWeek:"+w",   addFortnight:"+f",        addMonth:"+m",    addYear:"+y"   },
 			tooltip: {addDay:"day", addWeek:"week", addFortnight:"fortnight", addMonth:"month", addYear:"year" },
