@@ -51,6 +51,16 @@ merge(config.macros,{
 			}
 		}
 	},
+	toggleHideInnerListSibling: {
+		handler : function(place,macroName,params,wikifier,paramString,tiddler){
+			createTiddlyButton(place,'⨀','Hide',this.onClick);
+		},
+		onClick : function(e) {
+			var innerList = window.jQuery(this).parent().siblings(".innerList");
+			innerList.toggle("fast");
+		}
+
+	},
 	mgtdList: {
 
 		getActiveRealms: function() {
@@ -113,6 +123,9 @@ merge(config.macros,{
 					tags, // newSavedTiddler wants tags in one param?
 					tags.readBracketedList()[0] // just show first tag in prompt and tooltip. it's the important one
 				]); 
+		},
+		getToggleHideButton: function() {
+			return '<<toggleHideInnerListSibling>>';
 		},
 
 
@@ -278,6 +291,8 @@ merge(config.macros,{
 
 				wikifyThis += this.getNewButton(nbExtra);
 				// but still use nbTags later on in group headings...
+				
+				wikifyThis += this.getToggleHideButton();
 
 			}
 
