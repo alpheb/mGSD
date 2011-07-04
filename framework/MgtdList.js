@@ -1,38 +1,38 @@
 
 merge(Tiddler.prototype,{
-	// doesn't belong here..
-	ticklerIsActive: function() {
-		var defaultHourToActivate = 5; // fixme put elsewhere
-		var hourToActivate = config.mGTD.getOptTxt('tickleractivatehour') || defaultHourToActivate;
-		var nowTime = new Date();
-		nowTime.setHours(nowTime.getHours() - hourToActivate); // i'm confused because of UTC versus local. I think mgtd_date is UTC. But has hh:mm:ss is 00:00:00 in local time
-		// a tickler without a date is active now. so please add a date to your ticklers. thanks Arkady Grudzinsky
-		return (!this.fields.mgtd_date || nowTime.convertToYYYYMMDDHHMM() >= this.fields.mgtd_date );
-	},
+  // doesn't belong here..
+  ticklerIsActive: function() {
+    var defaultHourToActivate = 5; // fixme put elsewhere
+    var hourToActivate = config.mGTD.getOptTxt('tickleractivatehour') || defaultHourToActivate;
+    var nowTime = new Date();
+    nowTime.setHours(nowTime.getHours() - hourToActivate); // i'm confused because of UTC versus local. I think mgtd_date is UTC. But has hh:mm:ss is 00:00:00 in local time
+    // a tickler without a date is active now. so please add a date to your ticklers. thanks Arkady Grudzinsky
+    return (!this.fields.mgtd_date || nowTime.convertToYYYYMMDDHHMM() >= this.fields.mgtd_date );
+  },
 
-	// Contributed by Michael Scherer
-	ticklerWillBeActiveWithin: function(numDays) {
-		// Ignore ticklers without date
-		if (!this.fields.mgtd_date)
-			return false;
+  // Contributed by Michael Scherer
+  ticklerWillBeActiveWithin: function(numDays) {
+    // Ignore ticklers without date
+    if (!this.fields.mgtd_date)
+      return false;
 
-		var nowTime = new Date();
+    var nowTime = new Date();
 
-		// Respect user settings (see tickerIsActive())
-		var defaultHourToActivate = 5; // fixme put elsewhere
-		var hourToActivate = config.mGTD.getOptTxt('tickleractivatehour') || defaultHourToActivate;
-		if (nowTime.getHours() < hourToActivate) {
-			// Too early in the morning, go back one day.
-			nowTime.setDate(nowTime.getDate() - 1);
-		}
+    // Respect user settings (see tickerIsActive())
+    var defaultHourToActivate = 5; // fixme put elsewhere
+    var hourToActivate = config.mGTD.getOptTxt('tickleractivatehour') || defaultHourToActivate;
+    if (nowTime.getHours() < hourToActivate) {
+      // Too early in the morning, go back one day.
+      nowTime.setDate(nowTime.getDate() - 1);
+    }
 
-		// Start tomorrow
-		startTime = new Date(nowTime.getFullYear(), nowTime.getMonth(), nowTime.getDate() + 1);
-		// End in numDays days
-		endTime = new Date(nowTime.getFullYear(), nowTime.getMonth(), nowTime.getDate() + 1 + numDays);
+    // Start tomorrow
+    startTime = new Date(nowTime.getFullYear(), nowTime.getMonth(), nowTime.getDate() + 1);
+    // End in numDays days
+    endTime = new Date(nowTime.getFullYear(), nowTime.getMonth(), nowTime.getDate() + 1 + numDays);
 
-		return (startTime.convertToYYYYMMDDHHMM() <= this.fields.mgtd_date && endTime.convertToYYYYMMDDHHMM() > this.fields.mgtd_date);
-	}
+    return (startTime.convertToYYYYMMDDHHMM() <= this.fields.mgtd_date && endTime.convertToYYYYMMDDHHMM() > this.fields.mgtd_date);
+  }
 });
 
 merge(config.macros,{
@@ -222,145 +222,146 @@ merge(config.macros,{
 				listRefreshContainer.setAttribute("tiddlerTitle",tiddler.title);
 			listRefreshContainer.setAttribute("dontShowEmpty",dontShowEmpty);
 
-			this.refresh(listRefreshContainer);
-		},
 
-		refresh: function(place) {
+      this.refresh(listRefreshContainer);
+    },
 
-			removeChildren(place);
+    refresh: function(place) {
 
-			var title = place.getAttribute("title");
-			var startTag = place.getAttribute("startTag");
-			var tagMode = place.getAttribute("tagMode");
-			var tagExpr = place.getAttribute("tagExpr");
-			var groupBy = place.getAttribute("groupBy");
-			var groupCountOnly = place.getAttribute("groupCountOnly");
-			var gTagExpr = place.getAttribute("gTagExpr");
-			var whereExpr = place.getAttribute("whereExpr");
-			var gWhereExpr = place.getAttribute("gWhereExpr");
-			var sortBy = place.getAttribute("sortBy");
-			var gSortBy = place.getAttribute("gSortBy");
-			var viewType = place.getAttribute("viewType");
-			var gViewType = place.getAttribute("gViewType");
-			var ignoreRealm = place.getAttribute("ignoreRealm");
-			var leftoverTitle = place.getAttribute("leftoverTitle");
-			var newButton = place.getAttribute("newButton");
-			var newButtonTags = place.getAttribute("newButtonTags");
-			var tiddlerTitle = place.getAttribute("tiddlerTitle");
-			var dontShowEmpty = place.getAttribute("dontShowEmpty");
+      removeChildren(place);
 
-			var wikifyThis = "";
+      var title = place.getAttribute("title");
+      var startTag = place.getAttribute("startTag");
+      var tagMode = place.getAttribute("tagMode");
+      var tagExpr = place.getAttribute("tagExpr");
+      var groupBy = place.getAttribute("groupBy");
+      var groupCountOnly = place.getAttribute("groupCountOnly");
+      var gTagExpr = place.getAttribute("gTagExpr");
+      var whereExpr = place.getAttribute("whereExpr");
+      var gWhereExpr = place.getAttribute("gWhereExpr");
+      var sortBy = place.getAttribute("sortBy");
+      var gSortBy = place.getAttribute("gSortBy");
+      var viewType = place.getAttribute("viewType");
+      var gViewType = place.getAttribute("gViewType");
+      var ignoreRealm = place.getAttribute("ignoreRealm");
+      var leftoverTitle = place.getAttribute("leftoverTitle");
+      var newButton = place.getAttribute("newButton");
+      var newButtonTags = place.getAttribute("newButtonTags");
+      var tiddlerTitle = place.getAttribute("tiddlerTitle");
+      var dontShowEmpty = place.getAttribute("dontShowEmpty");
 
-			wikifyThis += "{{mgtdList{\n";
+      var wikifyThis = "";
+
+      wikifyThis += "{{mgtdList{\n";
 
             if (title != "")
-			    wikifyThis += "!"+title
+          wikifyThis += "!"+title
 
-			var nbTags;
-			if (newButtonTags != '') {
-				nbTags = [
-						newButtonTags,                                  // the tags specified in the macro params
-						'[['+config.macros.mgtdList.getRealm(tiddlerTitle)+']]',    // the realm. always want a realm
-						(tagMode=='global'?'':'[['+tiddlerTitle+']]')   // if not global, then the add tiddler we're in, new here style
-					].join(' ');
+      var nbTags;
+      if (newButtonTags != '') {
+        nbTags = [
+            newButtonTags,                                  // the tags specified in the macro params
+            '[['+config.macros.mgtdList.getRealm(tiddlerTitle)+']]',    // the realm. always want a realm
+            (tagMode=='global'?'':'[['+tiddlerTitle+']]')   // if not global, then the add tiddler we're in, new here style
+          ].join(' ');
 
 
-				var nbList = nbTags.readBracketedList();
+        var nbList = nbTags.readBracketedList();
 
-				var nbExtra = nbTags;
+        var nbExtra = nbTags;
 
-				// also we want an area. another hack. darn you subprojects.. :)
-				if (nbList.contains('Project') && !nbList.containsAny(fastTagged('Area').toTitleList())) {
-					var foo = store.fetchTiddler(tiddlerTitle).getByIndex('Area');
-					if (foo.length > 0) {
-						nbExtra += ' [[' + foo[0] + ']]';
-					}
-				}
+        // also we want an area. another hack. darn you subprojects.. :)
+        if (nbList.contains('Project') && !nbList.containsAny(fastTagged('Area').toTitleList())) {
+          var foo = store.fetchTiddler(tiddlerTitle).getByIndex('Area');
+          if (foo.length > 0) {
+            nbExtra += ' [[' + foo[0] + ']]';
+          }
+        }
 
-				if (nbList.contains('Project') && !nbList.containsAny(fastTagged('ProjectStatus').toTitleList())) {
-					// stupid hack for subprojects list in project dashboards
- 					// don't want to create a project with no status
-					// this is the hack:
-					nbExtra += ' Active';
-				}
+        if (nbList.contains('Project') && !nbList.containsAny(fastTagged('ProjectStatus').toTitleList())) {
+          // stupid hack for subprojects list in project dashboards
+          // don't want to create a project with no status
+          // this is the hack:
+          nbExtra += ' Active';
+        }
 
-				// same hack thing for actions
-				if (nbList.contains('Action') && !nbList.containsAny(fastTagged('ActionStatus').toTitleList())) {
-					nbExtra += ' Next';
-				}
+        // same hack thing for actions
+        if (nbList.contains('Action') && !nbList.containsAny(fastTagged('ActionStatus').toTitleList())) {
+          nbExtra += ' Next';
+        }
+
 
 				wikifyThis += this.getNewButton(nbExtra);
 				// but still use nbTags later on in group headings...
 				
 				wikifyThis += this.getToggleHideButton();
 
-			}
+      }
 
 
             if (title != "" || newButton != "")
-			    wikifyThis += "\n";
+          wikifyThis += "\n";
 
-			wikifyThis += "{{innerList{\n";
+      wikifyThis += "{{innerList{\n";
 
-			var checkForContent = wikifyThis;
+      var checkForContent = wikifyThis;
 
-			var theList = [];
-			if (startTag && startTag != 'undefined'/* this sucks */) {
-				theList = fastTagged(startTag);
-			}
-			else {
-				// why so hard to get an array of all tiddlers?
-				store.forEachTiddler(function(t_title,t_tiddler) { theList.push(t_tiddler); });
-			}
+      var theList = [];
+      if (startTag && startTag != 'undefined'/* this sucks */) {
+        theList = fastTagged(startTag);
+      }
+      else {
+        // why so hard to get an array of all tiddlers?
+        store.forEachTiddler(function(t_title,t_tiddler) { theList.push(t_tiddler); });
+      }
 
 
-			if (tagExpr != "") theList = theList.filterByTagExpr(tagExpr);
-			if (whereExpr != "") theList = theList.filterByEval(whereExpr);
+      if (tagExpr != "") theList = theList.filterByTagExpr(tagExpr);
+      if (whereExpr != "") theList = theList.filterByEval(whereExpr);
 
-			if (ignoreRealm != "yes") {
-				var activeRealms = config.macros.mgtdList.getActiveRealms();
-				theList = theList.select(function(t) {
-					var realm = t.getByIndex("Realm");
-					return (
-						realm.length == 0 ||  // so something with no realm shows up
-						realm.containsAny(activeRealms)
-					);
-				});
-			}
+      if (ignoreRealm != "yes") {
+        var activeRealms = config.macros.mgtdList.getActiveRealms();
+        theList = theList.select(function(t) {
+          var realm = t.getByIndex("Realm");
+          return (
+            realm.length == 0 ||  // so something with no realm shows up
+            realm.containsAny(activeRealms)
+          );
+        });
+      }
 
             if (groupBy == "day") {
                 // experimental. changing a tag doesn't update modified so
                 // this isn't as useful
                 theList = theList.groupBy(function(t){return [t.modified.formatString('YYYY-0MM-0DD')];});
-				wikifyThis += theList.renderGrouped(viewType,gViewType,leftoverTitle);
+        wikifyThis += theList.renderGrouped(viewType,gViewType,leftoverTitle);
             }
-			else if (groupBy != "") {
-				theList = theList.groupByTag(groupBy,sortBy,gSortBy);
-				if (gTagExpr != "") theList = theList.filterGroupsByTagExpr(gTagExpr);
-				if (gWhereExpr != "") theList = theList.filterGroupsByEval(gWhereExpr);
-				wikifyThis += theList.renderGrouped(viewType,gViewType,leftoverTitle,null,groupCountOnly,nbTags);
-			}
-			else {
-				theList = theList.tiddlerSort(sortBy);
-				wikifyThis += theList.render(viewType);
-			}
+      else if (groupBy != "") {
+        theList = theList.groupByTag(groupBy,sortBy,gSortBy);
+        if (gTagExpr != "") theList = theList.filterGroupsByTagExpr(gTagExpr);
+        if (gWhereExpr != "") theList = theList.filterGroupsByEval(gWhereExpr);
+        wikifyThis += theList.renderGrouped(viewType,gViewType,leftoverTitle,null,groupCountOnly,nbTags);
+      }
+      else {
+        theList = theList.tiddlerSort(sortBy);
+        wikifyThis += theList.render(viewType);
+      }
 
-			var emptyList = false;
-			if (wikifyThis == checkForContent) {
-				emptyList = true;
-				wikifyThis += "{{none{none}}}";
-			}
+      var emptyList = false;
+      if (wikifyThis == checkForContent) {
+        emptyList = true;
+        wikifyThis += "{{none{none}}}";
+      }
 
-			wikifyThis += "}}}\n";
-			wikifyThis += "}}}\n";
+      wikifyThis += "}}}\n";
+      wikifyThis += "}}}\n";
 
-			if (!(dontShowEmpty == "yes" && emptyList))
-				wikify(wikifyThis,place,null,tiddler);
+      if (!(dontShowEmpty == "yes" && emptyList))
+        wikify(wikifyThis,place,null,tiddler);
 
-			forceReflow(); // fixes rendering issues. (but probably doubles up rendering time??)
+      forceReflow(); // fixes rendering issues. (but probably doubles up rendering time??)
 
-		}
-	}
+    }
+  }
 
 });
-
