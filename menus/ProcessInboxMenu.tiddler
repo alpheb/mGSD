@@ -11,7 +11,7 @@
 <<newSavedTiddler title:'new Contact' label:'new contact' tag:{{'Contact [['+config.macros.mgtdList.getRealm()+']]'}}>>/%
 %/<<newSavedTiddler title:'new Context' label:'new context' tag:{{'Context [['+config.macros.mgtdList.getRealm()+']]'}}>>/%
 %/<<newSavedTiddler title:'new Area' label:'new area' tag:{{'Area [['+config.macros.mgtdList.getRealm()+']]'}}>>/%
-%/<<newSavedTiddler title:'new Realm' label:'new realm' tag:{{'Realm [['+config.macros.mgtdList.getRealm()+']]'}}>>''
+%/<<newSavedTiddler title:'new Realm' label:'new realm' tag:{{'Realm'}}>>''
 !!Recent
 <<mgtdList mode:global tags:'Project || Action' view:plain sort:-modified >>
 
